@@ -74,7 +74,19 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        score = successorGameState.getScore()
+
+        # HINTS:
+        # Given currentGameState and successorGameState, determine if the next state is good / bad
+        # Compute a numerical score for next state that will reflect this
+        # Base score = successorGameState.getScore() - Line 77
+        # Can increase / decrease this score depending on:
+        #   new pacman position, ghost position, food position, 
+        #   distances to ghosts, distances to food
+        # You can choose which features to use in your evaluation function
+        # You can also put more weight to some features
+
+        return score
 
 def scoreEvaluationFunction(currentGameState):
     """
@@ -129,7 +141,48 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        currentDepth = 0
+        currentAgentIndex = self.index # agent's index
+        action,score = self.value(gameState, currentAgentIndex, currentDepth)
+        return action 
+
+    # Note: always returns (action,score) pair
+    def value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # Check when to update depth
+      # check if currentDepth == self.depth
+      #   if it is, stop recursion and return score of gameState based on self.evaluationFunction
+      # check if gameState.isWin() or gameState.isLose()
+      #   if it is, stop recursion and return score of gameState based on self.evaluationFunction
+      # check whether currentAgentIndex is our pacman agent or ghost agent
+      # if our agent: return max_value(....)
+      # otherwise: return min_value(....)
+
+    # Note: always returns (action,score) pair
+    def max_value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # current_value = -inf
+      # loop over each action available to current agent:
+      # (hint: use gameState.getLegalActions(...) for this)
+      #     use gameState.generateSuccessor to get nextGameState from action
+      #     compute value of nextGameState by calling self.value
+      #     compare value of nextGameState and current_value
+      #     keep whichever value is bigger, and take note of the action too
+      # return (action,current_value)
+
+    # Note: always returns (action,score) pair
+    def min_value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # current_value = inf
+      # loop over each action available to current agent:
+      # (hint: use gameState.getLegalActions(...) for this)
+      #     use gameState.generateSuccessor to get nextGameState from action
+      #     compute value of nextGameState by calling self.value
+      #     compare value of nextGameState and current_value
+      #     keep whichever value is smaller, and take note of the action too
+      # return (action,current_value)
+
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
@@ -141,7 +194,34 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
           Returns the minimax action using self.depth and self.evaluationFunction
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        currentDepth = 0
+        currentAgentIndex = self.index # agent's index
+        alpha = float('inf') * -1
+        beta = float('inf')
+        action,score = self.value(gameState, currentAgentIndex, currentDepth, alpha, beta)
+        return action 
+
+    # Note: always returns (action,score) pair
+    def value(self, gameState, currentAgentIndex, currentDepth, alpha, beta):
+      pass
+      # More or less the same with MinimaxAgent's value() method
+      # Just update the calls to max_value and min_value (should now include alpha, beta params)
+
+    # Note: always returns (action,score) pair
+    def max_value(self, gameState, currentAgentIndex, currentDepth, alpha, beta):
+      pass
+      # Similar to MinimaxAgent's max_value() method
+      # Include checking if current_value is worse than beta
+      #   if so, immediately return current (action,current_value) tuple
+      # Include updating of alpha
+
+    # Note: always returns (action,score) pair
+    def min_value(self, gameState, currentAgentIndex, currentDepth, alpha, beta):
+      pass
+      # Similar to MinimaxAgent's min_value() method
+      # Include checking if current_value is worse than alpha
+      #   if so, immediately return current (action,current_value) tuple
+      # Include updating of beta
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
@@ -156,7 +236,37 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
           legal moves.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        currentDepth = 0
+        currentAgentIndex = self.index # agent's index
+        action,score = self.value(gameState, currentAgentIndex, currentDepth)
+        return action 
+
+    # Note: always returns (action,score) pair
+    def value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # More or less the same with MinimaxAgent's value() method
+      # Only difference: use exp_value instead of min_value
+
+    # Note: always returns (action,score) pair
+    def max_value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # Exactly like MinimaxAgent's max_value() method
+
+    # Note: always returns (action,score) pair
+    def exp_value(self, gameState, currentAgentIndex, currentDepth):
+      pass
+      # use gameState.getLegalActions(...) to get list of actions
+      # assume uniform probability of possible actions
+      # compute probabilities of each action
+      # be careful with division by zero
+      # Compute the total expected value by:
+      #   checking all actions
+      #   for each action, compute the score the nextGameState will get
+      #   multiply score by probability
+      # Return (None,total_expected_value) 
+      # None action --> we only need to compute exp_value but since the 
+      # signature return values of these functions are (action,score), we will return an empty action
+
 
 def betterEvaluationFunction(currentGameState):
     """
@@ -166,7 +276,15 @@ def betterEvaluationFunction(currentGameState):
       DESCRIPTION: <write something here so we know what you did>
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    score = currentGameState.getScore()
+    # Similar to Q1, only this time there's only one state (no nextGameState to compare it to)
+    # Use similar features here: position, food, ghosts, scared ghosts, distances, etc.
+    # Can use manhattanDistance() function
+    # You can add weights to these features
+    # Update the score variable (add / subtract), depending on the features and their weights
+    # Note: Edit the Description in the string above to describe what you did here
+
+    return score
 
 # Abbreviation
 better = betterEvaluationFunction
