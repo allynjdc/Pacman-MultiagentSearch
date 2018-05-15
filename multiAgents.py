@@ -385,7 +385,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             next_v = self.value(gameState.generateSuccessor(currentAgentIndex, action), currentAgentIndex+1, currentDepth, alpha, beta)
             current_value = max(act[1], next_v[1] if type(next_v) is tuple else next_v)
             if current_value is not act[1]:
-                act = (action, current_value)
+                act = (action, current_value) 
             if current_value > beta:
                 return act
             alpha = max(alpha, current_value)
@@ -431,7 +431,7 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             next_v = self.value(gameState.generateSuccessor(currentAgentIndex, action), currentAgentIndex+1, currentDepth, alpha, beta)
             current_value = min(act[1], next_v[1] if type(next_v) is tuple else next_v)
             if current_value is not act[1]:
-                act = (action, current_value)
+                act = (action, current_value) 
             if current_value < alpha:
                 return act
             beta = min(beta, current_value)

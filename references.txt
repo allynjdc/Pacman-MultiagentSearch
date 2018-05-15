@@ -1,0 +1,8 @@
+REFERENCES:
+ > Adversarial Search, CMSC170 Lecture Slides & Notes
+ > http://ai.berkeley.edu/multiagent.html
+ > 
+
+
+GROUP'S GITHUB REPOSITORY:
+ > https://github.com/allynjdc/Pacman-MultiagentSearch
