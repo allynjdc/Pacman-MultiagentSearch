@@ -470,18 +470,46 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
 
     # Note: always returns (action,score) pair
     def value(self, gameState, currentAgentIndex, currentDepth):
-      pass
+      # pass
       # More or less the same with MinimaxAgent's value() method
       # Only difference: use exp_value instead of min_value
+        if currentAgentIndex >= gameState.getNumAgents():
+            currentAgentIndex = 0
+            currentDepth += 1
+
+        if currentDepth == self.depth:
+            return self.evaluationFunction(gameState)
+
+        if gameState.isWin() or gameState.isLose():
+            # return self.evaluationFunction(gameState)
+            return gameState.getScore()
+
+        if currentAgentIndex == 0:
+            return self.max_value(gameState, currentAgentIndex, currentDepth)
+        
+        return self.exp_value(gameState, currentAgentIndex, currentDepth)
+
 
     # Note: always returns (action,score) pair
     def max_value(self, gameState, currentAgentIndex, currentDepth):
-      pass
+      # pass
       # Exactly like MinimaxAgent's max_value() method
+
+        current_value = float('inf') * -1
+        act = ("unknown", current_value)
+
+        for action in gameState.getLegalActions(currentAgentIndex):
+            next_v = self.value(gameState.generateSuccessor(currentAgentIndex, action), currentAgentIndex+1, currentDepth)
+            current_value = max(act[1], next_v[1] if type(next_v) is tuple else next_v)
+            if current_value is not act[1]:
+                act = (action, current_value)
+
+        return act
+
 
     # Note: always returns (action,score) pair
     def exp_value(self, gameState, currentAgentIndex, currentDepth):
-      pass
+      # pass
       # use gameState.getLegalActions(...) to get list of actions
       # assume uniform probability of possible actions
       # compute probabilities of each action
@@ -493,6 +521,22 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       # Return (None,total_expected_value) 
       # None action --> we only need to compute exp_value but since the 
       # signature return values of these functions are (action,score), we will return an empty action
+
+        act = ["unknown", 0]
+        actionlist = [action for action in gameState.getLegalActions(currentAgentIndex) if action != "Stop"]
+        prob  =  1.0/len(actionlist)
+
+        for action in actionlist:
+            if action == "Stop":
+                continue
+
+            next_v = self.value(gameState.generateSuccessor(currentAgentIndex, action), currentAgentIndex+1, currentDepth)
+            next_v = next_v[1] if type(next_v) is tuple else next_v
+
+            act[1] += prob * next_v
+            act[0] = action
+
+        return tuple(act) 
 
 
 def betterEvaluationFunction(currentGameState):
