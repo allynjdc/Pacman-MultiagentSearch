@@ -74,7 +74,54 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+
+        #print "newPos: ",newPos
+        #print "newFood: ",newFood
+        #print "newGhostStates: ", newGhostStates
+        #print "newScaredTimes",  newScaredTimes
+        #print "successorGameState.getScore: ", successorGameState.getScore()
+
+        #print type(newFood.asList()[0])
+        #print "index", newGhostStates.index
+        foodcount = 0
+        for foodRow in newFood:
+          for food in foodRow:
+              if food: foodcount += 1
+        #print "count: ",foodcount
+        foodList = newFood.asList()
+       # print foodList
+
+        newGhostPositions = [ghostState.getPosition() for ghostState in newGhostStates]
+        distances = []
+        import math
+        for gostPos in newGhostPositions:
+          distance = manhattanDistance(newPos,gostPost)
+          distances.append(distance)
+        #print "distances",distances
+        
+
+        return successorGameState.getScore() - min(distances) + sum(newScaredTimes)
+
+        if successorGameState.isWin():
+          return float("inf") - 20
+        ghostposition = currentGameState.getGhostPosition(1)
+        distfromghost = util.manhattanDistance(ghostposition, newPos)
+        score = max(distfromghost, 3) + successorGameState.getScore()
+        foodlist = newFood.asList()
+        closestfood = 100
+        for foodpos in foodlist:
+            thisdist = util.manhattanDistance(foodpos, newPos)
+            if (thisdist < closestfood):
+                closestfood = thisdist
+        if (currentGameState.getNumFood() > successorGameState.getNumFood()):
+            score += 100
+        if action == Directions.STOP:
+            score -= 3
+        score -= 3 * closestfood
+        capsuleplaces = currentGameState.getCapsules()
+        if successorGameState.getPacmanPosition() in capsuleplaces:
+            score += 120
+        return score
 
 def scoreEvaluationFunction(currentGameState):
     """
