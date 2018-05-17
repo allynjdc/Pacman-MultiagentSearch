@@ -74,21 +74,6 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-
-        #print "newPos: ",newPos
-        #print "newFood: ",newFood
-        #print "newGhostStates: ", newGhostStates
-        #print "newScaredTimes",  newScaredTimes
-        #print "successorGameState.getScore: ", successorGameState.getScore()
-
-        foodList = newFood.asList()
-
-        newGhostPositions = [ghostState.getPosition() for ghostState in newGhostStates]
-        distances = []
-        for gostPos in newGhostPositions:
-          distance = manhattanDistance(newPos,gostPost)
-          distances.append(distance)
-
         # HINTS:
         # Given currentGameState and successorGameState, determine if the next state is good / bad
         # Compute a numerical score for next state that will reflect this
@@ -98,32 +83,21 @@ class ReflexAgent(Agent):
         #   distances to ghosts, distances to food
         # You can choose which features to use in your evaluation function
         # You can also put more weight to some features
-        score = successorGameState.getScore()
-        if successorGameState.isLose():
-          return float("inf")*-1 + 20
 
+        score = successorGameState.getScore()
+
+        if successorGameState.isWin():
+          return float("inf")
+        if successorGameState.isLose():
+          return -float("inf")
+
+        closestGhost = min([util.manhattanDistance(newPos,ghostState.getPosition()) for ghostState in newGhostStates])
+        closestFood = min([util.manhattanDistance(newPos,foodPos) for foodPos in newFood.asList()])
+
+        score += closestGhost - closestFood 
+       
         return score
       
-
-        # if successorGameState.isWin():
-        #   return float("inf") - 20
-        # ghostposition = currentGameState.getGhostPosition(1)
-        # distfromghost = util.manhattanDistance(ghostposition, newPos)
-        # score = max(distfromghost, 3) + successorGameState.getScore()
-        # foodlist = newFood.asList()
-        # closestfood = 100
-        # for foodpos in foodlist:
-        #     thisdist = util.manhattanDistance(foodpos, newPos)
-        #     if (thisdist < closestfood):
-        #         closestfood = thisdist
-        # if (currentGameState.getNumFood() > successorGameState.getNumFood()):
-        #     score += 100
-        # if action == Directions.STOP:
-        #     score -= 3
-        # score -= 3 * closestfood
-        # capsuleplaces = currentGameState.getCapsules()
-        # if successorGameState.getPacmanPosition() in capsuleplaces:
-        #     score += 120
 
 def scoreEvaluationFunction(currentGameState):
     """
