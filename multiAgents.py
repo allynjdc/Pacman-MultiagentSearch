@@ -74,6 +74,7 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
+        score = successorGameState.getScore()
         # HINTS:
         # Given currentGameState and successorGameState, determine if the next state is good / bad
         # Compute a numerical score for next state that will reflect this
@@ -83,8 +84,6 @@ class ReflexAgent(Agent):
         #   distances to ghosts, distances to food
         # You can choose which features to use in your evaluation function
         # You can also put more weight to some features
-
-        score = successorGameState.getScore()
 
         #IF THE NEXT STATE IS A SURE WIN,THEN RETURN A VERY HIGH SCORE (BEST CASE)
         if successorGameState.isWin():
@@ -571,6 +570,43 @@ def betterEvaluationFunction(currentGameState):
     # You can add weights to these features
     # Update the score variable (add / subtract), depending on the features and their weights
     # Note: Edit the Description in the string above to describe what you did here
+
+    
+
+
+    # HINTS:
+    # Given currentGameState and successorGameState, determine if the next state is good / bad
+    # Compute a numerical score for next state that will reflect this
+    # Base score = successorGameState.getScore() - Line 77
+    # Can increase / decrease this score depending on:
+    #   new pacman position, ghost position, food position, 
+    #   distances to ghosts, distances to food
+    # You can choose which features to use in your evaluation function
+    # You can also put more weight to some features
+
+    # Useful information you can extract from a GameState (pacman.py)
+    newPos = currentGameState.getPacmanPosition()
+    newFood = currentGameState.getFood()
+    newGhostStates = currentGameState.getGhostStates()
+    newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+
+
+    #IF THE NEXT STATE IS A SURE WIN,THEN RETURN A VERY HIGH SCORE (BEST CASE)
+    if currentGameState.isWin():
+      return float("inf")
+
+    #IF THE NEXT STATE IS A SURE LOSE, THEN RETURN A VERY LOW SCORE (WORST CASE)
+    if currentGameState.isLose():
+      return -float("inf")
+
+    # GETTING THE DISTANCES OF THE CLOSEST FOOD AND THE CLOSEST GHOST FROM THE PACMAN'S POSITION
+    closestGhost = min([util.manhattanDistance(newPos,ghostState.getPosition()) for ghostState in newGhostStates])
+    closestFood = min([util.manhattanDistance(newPos,foodPos) for foodPos in newFood.asList()])
+
+    # BASIC IDEA IS THAT FROM THE PACMAN'S POSITION, THE GHOST SHOULD ALWAYS BE FURTHER THAN THE 
+    # NEAREST FOOD (HIGH SCORE). OTHERWISE, LOWER SCORE.
+    #score += closestGhost - closestFood 
+    score += closestFood - 2*closestGhost
 
     return score
 
