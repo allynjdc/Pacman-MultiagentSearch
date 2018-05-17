@@ -86,14 +86,20 @@ class ReflexAgent(Agent):
 
         score = successorGameState.getScore()
 
+        #IF THE NEXT STATE IS A SURE WIN,THEN RETURN A VERY HIGH SCORE (BEST CASE)
         if successorGameState.isWin():
           return float("inf")
+
+        #IF THE NEXT STATE IS A SURE LOSE, THEN RETURN A VERY LOW SCORE (WORST CASE)
         if successorGameState.isLose():
           return -float("inf")
 
+        # GETTING THE DISTANCES OF THE CLOSEST FOOD AND THE CLOSEST GHOST FROM THE PACMAN'S POSITION
         closestGhost = min([util.manhattanDistance(newPos,ghostState.getPosition()) for ghostState in newGhostStates])
         closestFood = min([util.manhattanDistance(newPos,foodPos) for foodPos in newFood.asList()])
 
+        # BASIC IDEA IS THAT FROM THE PACMAN'S POSITION, THE GHOST SHOULD ALWAYS BE FURTHER THAN THE 
+        # NEAREST FOOD (HIGH SCORE). OTHERWISE, LOWER SCORE.
         score += closestGhost - closestFood 
        
         return score
