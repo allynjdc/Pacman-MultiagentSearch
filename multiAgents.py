@@ -571,11 +571,12 @@ def betterEvaluationFunction(currentGameState):
     # Update the score variable (add / subtract), depending on the features and their weights
     # Note: Edit the Description in the string above to describe what you did here
 
+    ######### CODE #########
+    
     newPos = currentGameState.getPacmanPosition()
     newFood = currentGameState.getFood()
     newGhostStates = currentGameState.getGhostStates()
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-
 
     #IF THE NEXT STATE IS A SURE WIN,THEN RETURN A VERY HIGH SCORE (BEST CASE)
     if currentGameState.isWin():
@@ -591,7 +592,6 @@ def betterEvaluationFunction(currentGameState):
 
     # BASIC IDEA IS THAT FROM THE PACMAN'S POSITION, THE GHOST SHOULD ALWAYS BE FURTHER THAN THE 
     # NEAREST FOOD (HIGH SCORE). OTHERWISE, LOWER SCORE.
-    #score += closestGhost - closestFood 
     score += closestFood - 2*closestGhost
 
     return score
