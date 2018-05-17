@@ -571,20 +571,6 @@ def betterEvaluationFunction(currentGameState):
     # Update the score variable (add / subtract), depending on the features and their weights
     # Note: Edit the Description in the string above to describe what you did here
 
-    
-
-
-    # HINTS:
-    # Given currentGameState and successorGameState, determine if the next state is good / bad
-    # Compute a numerical score for next state that will reflect this
-    # Base score = successorGameState.getScore() - Line 77
-    # Can increase / decrease this score depending on:
-    #   new pacman position, ghost position, food position, 
-    #   distances to ghosts, distances to food
-    # You can choose which features to use in your evaluation function
-    # You can also put more weight to some features
-
-    # Useful information you can extract from a GameState (pacman.py)
     newPos = currentGameState.getPacmanPosition()
     newFood = currentGameState.getFood()
     newGhostStates = currentGameState.getGhostStates()
